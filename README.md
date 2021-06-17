@@ -9,7 +9,7 @@ _изменение проверок в методах station:_
 maxStation = numStation - 1  
 _в тестах:_   
 volume 10 --> 100,  
-setStation_15 
+setStation_15,  
 setStation_shouldDontSetIncorrect - для 100% покрытия ветвлений
   
 
