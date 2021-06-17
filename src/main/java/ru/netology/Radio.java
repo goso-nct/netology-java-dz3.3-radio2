@@ -13,12 +13,16 @@ public class Radio {
     private int maxStation;
 
     public Radio() {
-        maxStation = numStation - 1;  // т.к. от 0
+        setMaxStation();
     }
 
     public Radio(int numStation) {
         this.numStation = numStation;
-        maxStation = numStation - 1;
+        setMaxStation();
+    }
+
+    private void setMaxStation() {
+        maxStation = numStation - 1;  // т.к. от 0
     }
 
     public void nextStation() {
@@ -50,7 +54,6 @@ public class Radio {
     }
 
     public void setStation(int station) {
-        // устанавливаем только корректное значение
         if (station >= MIN_STATION && station <= maxStation) {
             this.station = station;
         }
@@ -61,7 +64,6 @@ public class Radio {
     }
 
     void setVolume(int volume) {
-        // устанавливаем только корректное значение
         if (volume >= MIN_VOLUME && volume <= MAX_VOLUME)
             this.volume = volume;
     }
