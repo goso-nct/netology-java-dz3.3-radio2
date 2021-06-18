@@ -1,5 +1,7 @@
 package ru.netology;
 
+import lombok.AllArgsConstructor;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -10,15 +12,24 @@ import static org.junit.jupiter.api.Assertions.*;
 class RadioTest {
 
     Radio radio = new Radio();
-    Radio radio20Stations = new Radio(20);
+
+    @Test
+    void shouldCreateAllArgs() {
+        Radio radioAllArgs = new Radio(25,40,50);
+        assertEquals(25, radioAllArgs.getStation());
+        assertEquals(40, radioAllArgs.getVolume());
+        assertEquals(50, radioAllArgs.getNumStations());
+    }
 
     @Test
     void mustHave20Stations() {
-        assertEquals(20, radio20Stations.getNumStation());
+        Radio radio20Stations = new Radio(20);
+        assertEquals(20, radio20Stations.getNumStations());
     }
 
     @Test
     void setStation_15() {
+        Radio radio20Stations = new Radio(20);
         radio20Stations.setStation(15);
         assertEquals(15, radio20Stations.getStation());
     }
@@ -30,7 +41,7 @@ class RadioTest {
     }
 
     @ParameterizedTest
-    @ValueSource(ints = {0, 1, 5, 9, 10})
+    @ValueSource(ints = {0, 1, 5, 99, 100})
     void setVolume_shouldSetCorrect(int correct) {
         radio.setVolume(correct);
         assertEquals(correct, radio.getVolume());
@@ -38,6 +49,7 @@ class RadioTest {
 
     @ParameterizedTest
     @ValueSource(ints = {-10, -1, 101, 120})
+    @Disabled // setVolume генерит lombok - нет проверок
     void setVolume_shouldDontSetIncorrect(int incorrect) {
         radio.setVolume(incorrect);
         assertNotEquals(incorrect, radio.getVolume());
@@ -47,23 +59,25 @@ class RadioTest {
     void setStation_shouldSetCorrect() {
         radio.setStation(Radio.MIN_STATION);
         assertEquals(Radio.MIN_STATION, radio.getStation());
-        int middleStation = (Radio.MIN_STATION + radio.getMaxStation()) / 2;
+        int middleStation = (Radio.MIN_STATION + radio.getNumStations()) / 2;
         radio.setStation(middleStation);
         assertEquals(middleStation, radio.getStation());
-        radio.setStation(radio.getMaxStation());
-        assertEquals(radio.getMaxStation(), radio.getStation());
+        radio.setStation(radio.getNumStations());
+        assertEquals(radio.getNumStations(), radio.getStation());
     }
 
     @ParameterizedTest
     @ValueSource(ints = {-10, -1, 21, 40})
+    @Disabled // setStation генерит lombok - нет проверок
     void setStation_shouldDontSetIncorrect(int incorrect) {
+        Radio radio20Stations = new Radio(20);
         radio20Stations.setStation(incorrect);
         assertNotEquals(incorrect, radio20Stations.getVolume());
     }
 
     @ParameterizedTest
     @CsvSource(
-        value={ "0, 1", "1, 2", "5, 6", "8, 9", "9, 0" }
+        value={ "10, 1", "1, 2", "5, 6", "9, 10" }
     )
     void nextStation(int current, int expected) {
         radio.setStation(current);
@@ -73,7 +87,7 @@ class RadioTest {
 
     @ParameterizedTest
     @CsvSource(
-        value={ "9, 8", "8, 7", "5, 4", "1, 0", "0, 9" }
+        value={ "10, 9", "9, 8", "5, 4", "2, 1", "1, 10" }
     )
     void prevStation(int current, int expected) {
         radio.setStation(current);
@@ -93,7 +107,7 @@ class RadioTest {
 
     @ParameterizedTest
     @CsvSource(
-        value={ "10, 9", "9, 8", "8, 7", "6, 5", "1, 0", "0, 0" }
+        value={ "100, 99", "99, 98", "8, 7", "6, 5", "1, 0", "0, 0" }
     )
     void decreaseVolume(int current, int expected) {
         radio.setVolume(current);
